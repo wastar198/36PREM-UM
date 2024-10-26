@@ -6,13 +6,13 @@
     <title>36PREMİUM Giyim Mağazası</title>
     <style>
         body {
-            background-color: #800080;
+            background-color: #000080;
             color: white;
             font-family: Arial, sans-serif;
             position: relative;
         }
         h1 {
-            color: black;
+            color: white;
             text-align: center;
         }
         .ilanlar {
@@ -40,7 +40,7 @@
             margin-top: 10px;
         }
         .sepet-button {
-            background-color: #800080;
+            background-color: #000080;
             color: white;
             border: none;
             padding: 10px;
@@ -105,6 +105,13 @@
             width: 50px;
             height: 50px;
         }
+        .email {
+            position: fixed;
+            bottom: 15px;
+            left: 5px;
+            color: black; /* Siyah yazı rengi */
+            font-size: 10px; /* Küçük font boyutu */
+        }
     </style>
     <script>
         let sepet = {};
@@ -166,11 +173,34 @@
         }
 
         function siparisEt() {
-            alert("Siparişiniz alınmıştır!");
-            sepet = {};
-            guncelleSepetSayisi();
-            document.getElementById('sepet').style.display = "none";
-            document.getElementById('siparis-formu').style.display = "none";
+            const adres = document.getElementById('adres').value;
+            if (adres === "") {
+                alert("Lütfen bir adres girin!");
+                return;
+            }
+
+            // Sipariş verilerini backend'e gönder
+            fetch('https://your-backend-api.com/send-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    adres: adres,
+                    siparis: sepet,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Siparişiniz alınmıştır!");
+                sepet = {};
+                guncelleSepetSayisi();
+                document.getElementById('sepet').style.display = "none";
+                document.getElementById('siparis-formu').style.display = "none";
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+            });
         }
     </script>
 </head>
@@ -205,25 +235,30 @@
             <button class="sepet-button" onclick="sepetEkle('Calvin Klein Jeans', 'https://i0.wp.com/revantevip.com/wp-content/uploads/2024/09/IMG_5334-scaled.jpeg?fit=500%2C667&ssl=1')">Sepete Ekle</button>
         </div>
         <div class="ilan">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJAyzMlMTJioWdvJvo1WoLS0NL4wOWIyi45oLahYDyhgMcKVSia7gpPi9hqMiTrl4FdHc&usqp=CAU" alt="Gucci">
+            <img src="https://r.resimlink.com/CVWHk-wJLyD.jpg" alt="Gucci">
             <p class="fiyat">Gucci: 650 TL</p>
-            <button class="sepet-button" onclick="sepetEkle('Gucci', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJAyzMlMTJioWdvJvo1WoLS0NL4wOWIyi45oLahYDyhgMcKVSia7gpPi9hqMiTrl4FdHc&usqp=CAU')">Sepete Ekle</button>
+            <button class="sepet-button" onclick="sepetEkle('Gucci', 'https://r.resimlink.com/CVWHk-wJLyD.jpg')">Sepete Ekle</button>
+        </div>
+        <div class="ilan">
+            <img src="https://r.resimlink.com/V-9B3.jpg" alt="Yeni Gucci">
+            <p class="fiyat">Yeni Gucci: 650 TL</p>
+            <button class="sepet-button" onclick="sepetEkle('Yeni Gucci', 'https://r.resimlink.com/V-9B3.jpg')">Sepete Ekle</button>
         </div>
     </div>
 
     <div id="siparis-formu" style="display: none;">
         <h2>Sipariş Formu</h2>
-        <label for="adres">Adres:</label>
+        <label for="adres">Adres-Telefon Numarası ve Tc:</label>
         <input type="text" id="adres" required>
         <button onclick="siparisEt()">Sipariş Et</button>
     </div>
 
     <footer>
         <h2>Hakkında</h2>
-        <p>Her zaman kalite ve estetiklik.</p>
+        <p>Her zaman kalite ve estetik.</p>
         <h2>İletişim Bilgileri</h2>
-        <p>Email: Udenhalil@gmail.com</p>
-        <p>Telefon: +90 552 801 41 36</p>
+        <p>Email: <a href="mailto:Udenhalil@gmail.com" style="color: white;">Udenhalil@gmail.com</a></p>
+        <p>Telefon: +90 0505 291 41 36</p>
         <p>Tüm hakları saklıdır.</p>
     </footer>
 
